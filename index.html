@@ -366,12 +366,10 @@
         const style = document.createElement('style');
         style.textContent = `
             @keyframes magicalRipple {
-                to {
-                    transform: scale(2.5);
-                    opacity: 0;
-                }
-            }
-        `;
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+    `;
         document.head.appendChild(style);
 
         // Add gentle floating animation to the container
@@ -393,3 +391,4 @@
     </script>
 </body>
 </html>
+
