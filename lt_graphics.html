@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pfulu in Progress - Link Tree</title>
+    <style>
+        body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #f9d5fd 0%, #caeaff 25%, #f0fff4 50%, #fffbeb 75%, #fdf2f8 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Floating decorations */
+        .decoration {
+            position: absolute;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .flower {
+            width: 100px;
+            height: 100px;
+            animation: gentleFloat 8s ease-in-out infinite;
+            opacity: 1.0;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        .mushroom {
+            width: 100px;
+            height: 100px;
+            animation: gentleFloat 8s ease-in-out infinite;
+            opacity: 1.0;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        .butterfly {
+            width: 100px;
+            height: 100px;
+            animation: gentleFloat 8s ease-in-out infinite;
+            opacity: 1.0;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        .sparkle {
+            width: 100px;
+            height: 100px;
+            animation: gentleFloat 8s ease-in-out infinite;
+            opacity: 1.0;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
+            50% { transform: translateY(-15px) rotate(3deg); opacity: 1; }
+        }
+
+        @keyframes flutter {
+            0%, 100% { transform: translateX(0px) translateY(0px) rotate(0deg); }
+            33% { transform: translateX(15px) translateY(-10px) rotate(8deg); }
+            66% { transform: translateX(-10px) translateY(-5px) rotate(-5deg); }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.4; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.3); }
+        }
+
+        /* Main container */
+        .container {
+            max-width: 420px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Profile section */
+        .profile {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #fbbf24, #f472b6, #a78bfa, #34d399);
+            border: 5px solid rgb(252, 163, 200);
+            box-shadow: 0 15px 40px rgba(168, 85, 247, 0.2), 0 0 30px rgba(244, 114, 182, 0.15);
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .profile-pic::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 50%;
+            background: linear-gradient(45deg);
+            z-index: -1;
+            animation: rotate 12s linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .username {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #a37ee2;
+            margin-bottom: 0.8rem;
+            text-shadow: 2px 2px 8px rgba(255, 255, 255, 0.8);
+            letter-spacing: 0.5px;
+        }
+
+        .bio {
+            color: #a855f7;
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        /* Button styles */
+        .link-button {
+            display: block;
+            width: 100%;
+            padding: 1.2rem 2rem;
+            margin-bottom: 1.5rem;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 0 20px rgba(255, 255, 255, 0.3) inset;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .link-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .link-button:hover::before {
+            left: 100%;
+        }
+
+        .link-button:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15), 0 0 30px rgba(255, 255, 255, 0.4) inset;
+        }
+
+        .youtube-main {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e, #ffa8a8);
+            font-size: 1.4rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.3), 0 0 25px rgba(255, 255, 255, 0.3) inset;
+        }
+
+        .timer-btn {
+            background: linear-gradient(135deg, #74b9ff, #a29bfe, #b8a9ff);
+        }
+
+        .email-btn {
+            background: linear-gradient(135deg, #fd79a8, #fdcb6e, #ffeaa7);
+        }
+
+        /* Future links section */
+        .future-section {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            text-align: center;
+        }
+
+        .future-title {
+            color: #ae84f8;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .future-text {
+            color: #791bd1;
+            font-size: 1rem;
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        /* Glow effects */
+        .glow {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.2); opacity: 0.6; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Ambient glow effects -->
+    <div class="glow" style="top: 10%; left: -5%;"></div>
+    <div class="glow" style="top: 60%; right: -5%;"></div>
+    <div class="glow" style="bottom: 20%; left: 20%;"></div>
+
+    <!-- Floating decorations with your custom flower images -->
+    <div class="decoration flower" style="top: 8%; left: 8%; background-image: url('images/9.png')"></div>
+    <div class="decoration flower" style="top: 15%; right: 12%; background-image: url('images/10.png')"></div>
+    <div class="decoration flower" style="top: 45%; left: 5%; background-image: url('images/16.png')"></div>
+    <div class="decoration flower" style="bottom: 20%; right: 8%; background-image: url('images/17.png')"></div>
+    <div class="decoration flower" style="bottom: 35%; left: 15%; background-image: url('images/18.png')"></div>
+    
+    <div class="decoration mushroom" style="top: 25%; left: 18%; background-image: url('images/19.png')"></div>
+    <div class="decoration mushroom" style="top: 55%; right: 15%; background-image: url('images/9.png')"></div>
+    <div class="decoration mushroom" style="bottom: 45%; left: 10%; background-image: url('images/10.png')"></div>
+    
+    <div class="decoration butterfly" style="top: 20%; left: 35%; background-image: url('images/11.png')"></div>
+    <div class="decoration butterfly" style="top: 65%; right: 25%; background-image: url('images/11.png')"></div>
+    <div class="decoration butterfly" style="bottom: 25%; left: 30%; background-image: url('images/16.png')"></div>
+    
+    <div class="decoration sparkle" style="top: 12%; left: 45%; background-image: url('images/17.png')"></div>
+    <div class="decoration sparkle" style="top: 35%; right: 20%; background-image: url('images/18.png')"></div>
+    <div class="decoration sparkle" style="top: 75%; left: 25%; background-image: url('images/19.png')"></div>
+    <div class="decoration sparkle" style="bottom: 15%; right: 35%; background-image: url('images/12.png')"></div>
+    <div class="decoration sparkle" style="bottom: 50%; left: 40%; background-image: url('images/12.png')"></div>
+
+    <div class="container">
+        <!-- Profile Section -->
+        <div class="profile">
+        <div class="profile-pic" style="background-image: url('images/me.png'); background-size: cover; background-position: center; width: 120px; height: 120px;"></div>            <div class="username">Pfulu in Progress</div>
+            <div class="bio">Sharing study vlogs, cozy timers, and creative progress ✨</div>
+        </div>
+
+        <!-- Main Links -->
+        <a href="https://youtube.com/@pfuluinprogress?si=yd28l5MEDy58fv-ks" target="_blank" rel="noopener noreferrer" class="link-button youtube-main">
+            🎬 My YouTube Channel
+        </a>
+
+        <a href="https://youtube.com/playlist?list=PLGLE2eHmnEa8K4gHc7uq8i89G-UNXmisV&si=vP7H_mo-oMe3P7Eg" target="_blank" rel="noopener noreferrer" class="link-button timer-btn">
+            ⏱️ My Timers
+        </a>
+
+        <a href="mailto:ayandamabidi@gmail.com" class="link-button email-btn">
+            ✉️ ayandamabidi@gmail.com
+        </a>
+
+        <!-- Future Links Section -->
+        <div class="future-section">
+            <div class="future-title">🍄 More Magic Coming Soon 🍄</div>
+            <div class="future-text">Notion templates, digital downloads, and other creative goodies will bloom here!</div>
+        </div>
+    </div>
+
+    <script>
+        // Create dynamic sparkles
+       function createMagicSparkle() {
+    const sparkle = document.createElement('div');
+    sparkle.className = 'decoration sparkle';
+    
+    // Create image element instead of text content
+    const sparkleImg = document.createElement('img');
+    sparkleImg.src = Math.random() > 0.5 ? 'images/7.png' : 'images/7.png';
+    sparkleImg.style.width = '100%';
+    sparkleImg.style.height = '100%';
+    sparkleImg.style.objectFit = 'contain';
+    
+    sparkle.appendChild(sparkleImg);
+    sparkle.style.left = Math.random() * 100 + '%';
+    sparkle.style.top = Math.random() * 100 + '%';
+    sparkle.style.animationDelay = Math.random() * 4 + 's';
+    sparkle.style.width = (Math.random() * 24 + 16) + 'px'; // Random width between 16-40px
+    sparkle.style.height = sparkle.style.width; // Keep it square
+    
+    document.body.appendChild(sparkle);
+    
+    setTimeout(() => {
+        sparkle.remove();
+    }, 8000);
+}
+
+        // Create sparkles periodically
+        setInterval(createMagicSparkle, 3000);
+
+        // Add magical click effects
+        document.querySelectorAll('.link-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                // Create magical ripple effect
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}px;
+                    top: ${y}px;
+                    background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
+                    border-radius: 50%;
+                    transform: scale(0);
+                    animation: magicalRipple 0.8s ease-out;
+                    pointer-events: none;
+                `;
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 800);
+            });
+        });
+
+        // Add magical ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes magicalRipple {
+                to {
+                    transform: scale(2.5);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Add gentle floating animation to the container
+        let mouseX = 0;
+        let mouseY = 0;
+        
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 20;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 20;
+        });
+
+        function animateContainer() {
+            const container = document.querySelector('.container');
+            container.style.transform = `translate(${mouseX * 0.1}px, ${mouseY * 0.1}px)`;
+            requestAnimationFrame(animateContainer);
+        }
+        
+        animateContainer();
+    </script>
+</body>
+</html>
