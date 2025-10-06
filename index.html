@@ -12,7 +12,8 @@
             font-family: 'Georgia', serif;
             background: linear-gradient(135deg, #f9d5fd 0%, #caeaff 25%, #f0fff4 50%, #fffbeb 75%, #fdf2f8 100%);
             min-height: 100vh;
-            overflow-x: hidden;
+            /* max-width: fit-content; */
+            overflow-x: clip;
             position: relative;
         }
 
@@ -85,10 +86,10 @@
 
         /* Main container */
         .container {
-            max-width: 420px;
+            max-width: 400px;
             margin: 0 auto;
             padding: 3rem 1.5rem;
-            position: relative;
+            position: center;
             z-index: 2;
         }
 
@@ -153,7 +154,7 @@
         /* Button styles */
         .link-button {
             display: block;
-            width: 100%;
+            width: 90%;
             padding: 1rem 1.5rem;
             margin-bottom: 1.5rem;
             border: none;
@@ -389,6 +390,6 @@
         
         animateContainer();
     </script>
+    
 </body>
 </html>
-
